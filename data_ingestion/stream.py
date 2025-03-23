@@ -92,7 +92,7 @@ def locate(u_id):
 
 # Dict: Finds state that given city is located in
 city_to_state_dict = {}
-with open("data_ingestion/city_to_state_dict.py", "r") as config_file:
+with open("city_to_state_dict.py", "r") as config_file:
     city_to_state_dict = json.load(config_file)
 
 # Sets up authentication to connect to Twitter API:
