@@ -1,0 +1,16 @@
+aws-cdk-lib==2.181.1
+constructs>=10.0.0,<11.0.0
+boto3
+spacy
+
+torch
+transformers
+datasets
+scikit-learn
+numpy
+pandas
+argparse
+
+langdetect
+twython
+geonamescache

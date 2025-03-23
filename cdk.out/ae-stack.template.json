@@ -1,0 +1,1011 @@
+{
+ "Resources": {
+  "AEModelingMyVPCB6D3E1F0": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "10.0.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "ae-stack/AEModeling/MyVPC"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/Resource"
+   }
+  },
+  "AEModelingMyVPCPublicSubnet1Subnet374CAE00": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.0.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "ae-stack/AEModeling/MyVPC/PublicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "AEModelingMyVPCB6D3E1F0"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PublicSubnet1/Subnet"
+   }
+  },
+  "AEModelingMyVPCPublicSubnet1RouteTable426C4EB5": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "ae-stack/AEModeling/MyVPC/PublicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "AEModelingMyVPCB6D3E1F0"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PublicSubnet1/RouteTable"
+   }
+  },
+  "AEModelingMyVPCPublicSubnet1RouteTableAssociationCCA8E227": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "AEModelingMyVPCPublicSubnet1RouteTable426C4EB5"
+    },
+    "SubnetId": {
+     "Ref": "AEModelingMyVPCPublicSubnet1Subnet374CAE00"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PublicSubnet1/RouteTableAssociation"
+   }
+  },
+  "AEModelingMyVPCPublicSubnet1DefaultRouteB08AB647": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "AEModelingMyVPCIGW5BDB9D2A"
+    },
+    "RouteTableId": {
+     "Ref": "AEModelingMyVPCPublicSubnet1RouteTable426C4EB5"
+    }
+   },
+   "DependsOn": [
+    "AEModelingMyVPCVPCGW1369752F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PublicSubnet1/DefaultRoute"
+   }
+  },
+  "AEModelingMyVPCPublicSubnet1EIP4B6333E7": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "ae-stack/AEModeling/MyVPC/PublicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PublicSubnet1/EIP"
+   }
+  },
+  "AEModelingMyVPCPublicSubnet1NATGatewayB1DB81AC": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "AEModelingMyVPCPublicSubnet1EIP4B6333E7",
+      "AllocationId"
+     ]
+    },
+    "SubnetId": {
+     "Ref": "AEModelingMyVPCPublicSubnet1Subnet374CAE00"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "ae-stack/AEModeling/MyVPC/PublicSubnet1"
+     }
+    ]
+   },
+   "DependsOn": [
+    "AEModelingMyVPCPublicSubnet1DefaultRouteB08AB647",
+    "AEModelingMyVPCPublicSubnet1RouteTableAssociationCCA8E227"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PublicSubnet1/NATGateway"
+   }
+  },
+  "AEModelingMyVPCPublicSubnet2SubnetE9333750": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.64.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "ae-stack/AEModeling/MyVPC/PublicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "AEModelingMyVPCB6D3E1F0"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PublicSubnet2/Subnet"
+   }
+  },
+  "AEModelingMyVPCPublicSubnet2RouteTable0A7B3600": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "ae-stack/AEModeling/MyVPC/PublicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "AEModelingMyVPCB6D3E1F0"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PublicSubnet2/RouteTable"
+   }
+  },
+  "AEModelingMyVPCPublicSubnet2RouteTableAssociationACD4E6D9": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "AEModelingMyVPCPublicSubnet2RouteTable0A7B3600"
+    },
+    "SubnetId": {
+     "Ref": "AEModelingMyVPCPublicSubnet2SubnetE9333750"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PublicSubnet2/RouteTableAssociation"
+   }
+  },
+  "AEModelingMyVPCPublicSubnet2DefaultRoute9CEA7C3A": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "AEModelingMyVPCIGW5BDB9D2A"
+    },
+    "RouteTableId": {
+     "Ref": "AEModelingMyVPCPublicSubnet2RouteTable0A7B3600"
+    }
+   },
+   "DependsOn": [
+    "AEModelingMyVPCVPCGW1369752F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PublicSubnet2/DefaultRoute"
+   }
+  },
+  "AEModelingMyVPCPublicSubnet2EIP7F2C7E51": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "ae-stack/AEModeling/MyVPC/PublicSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PublicSubnet2/EIP"
+   }
+  },
+  "AEModelingMyVPCPublicSubnet2NATGateway35B40442": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "AEModelingMyVPCPublicSubnet2EIP7F2C7E51",
+      "AllocationId"
+     ]
+    },
+    "SubnetId": {
+     "Ref": "AEModelingMyVPCPublicSubnet2SubnetE9333750"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "ae-stack/AEModeling/MyVPC/PublicSubnet2"
+     }
+    ]
+   },
+   "DependsOn": [
+    "AEModelingMyVPCPublicSubnet2DefaultRoute9CEA7C3A",
+    "AEModelingMyVPCPublicSubnet2RouteTableAssociationACD4E6D9"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PublicSubnet2/NATGateway"
+   }
+  },
+  "AEModelingMyVPCPrivateSubnet1Subnet0237F56B": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.128.0/18",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "ae-stack/AEModeling/MyVPC/PrivateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "AEModelingMyVPCB6D3E1F0"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PrivateSubnet1/Subnet"
+   }
+  },
+  "AEModelingMyVPCPrivateSubnet1RouteTableC6E63E7F": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "ae-stack/AEModeling/MyVPC/PrivateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "AEModelingMyVPCB6D3E1F0"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PrivateSubnet1/RouteTable"
+   }
+  },
+  "AEModelingMyVPCPrivateSubnet1RouteTableAssociation0C16C956": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "AEModelingMyVPCPrivateSubnet1RouteTableC6E63E7F"
+    },
+    "SubnetId": {
+     "Ref": "AEModelingMyVPCPrivateSubnet1Subnet0237F56B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PrivateSubnet1/RouteTableAssociation"
+   }
+  },
+  "AEModelingMyVPCPrivateSubnet1DefaultRoute879A8008": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "AEModelingMyVPCPublicSubnet1NATGatewayB1DB81AC"
+    },
+    "RouteTableId": {
+     "Ref": "AEModelingMyVPCPrivateSubnet1RouteTableC6E63E7F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PrivateSubnet1/DefaultRoute"
+   }
+  },
+  "AEModelingMyVPCPrivateSubnet2Subnet677D7DF8": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.192.0/18",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "ae-stack/AEModeling/MyVPC/PrivateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "AEModelingMyVPCB6D3E1F0"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PrivateSubnet2/Subnet"
+   }
+  },
+  "AEModelingMyVPCPrivateSubnet2RouteTable7D9BC8D6": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "ae-stack/AEModeling/MyVPC/PrivateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "AEModelingMyVPCB6D3E1F0"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PrivateSubnet2/RouteTable"
+   }
+  },
+  "AEModelingMyVPCPrivateSubnet2RouteTableAssociation9AD8636D": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "AEModelingMyVPCPrivateSubnet2RouteTable7D9BC8D6"
+    },
+    "SubnetId": {
+     "Ref": "AEModelingMyVPCPrivateSubnet2Subnet677D7DF8"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PrivateSubnet2/RouteTableAssociation"
+   }
+  },
+  "AEModelingMyVPCPrivateSubnet2DefaultRoute5DD73F13": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "AEModelingMyVPCPublicSubnet2NATGateway35B40442"
+    },
+    "RouteTableId": {
+     "Ref": "AEModelingMyVPCPrivateSubnet2RouteTable7D9BC8D6"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/PrivateSubnet2/DefaultRoute"
+   }
+  },
+  "AEModelingMyVPCIGW5BDB9D2A": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "ae-stack/AEModeling/MyVPC"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/IGW"
+   }
+  },
+  "AEModelingMyVPCVPCGW1369752F": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "InternetGatewayId": {
+     "Ref": "AEModelingMyVPCIGW5BDB9D2A"
+    },
+    "VpcId": {
+     "Ref": "AEModelingMyVPCB6D3E1F0"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/VPCGW"
+   }
+  },
+  "AEModelingMyVPCRestrictDefaultSecurityGroupCustomResourceD5DA16E6": {
+   "Type": "Custom::VpcRestrictDefaultSG",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E",
+      "Arn"
+     ]
+    },
+    "DefaultSecurityGroupId": {
+     "Fn::GetAtt": [
+      "AEModelingMyVPCB6D3E1F0",
+      "DefaultSecurityGroup"
+     ]
+    },
+    "Account": {
+     "Ref": "AWS::AccountId"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/MyVPC/RestrictDefaultSecurityGroupCustomResource/Default"
+   }
+  },
+  "AEModelingAEModelingServiceRoleB9E24156": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": [
+         "lambda.amazonaws.com",
+         "s3.amazonaws.com",
+         "sagemaker.amazonaws.com"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonSageMakerFullAccess"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonS3FullAccess"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/AEModeling-ServiceRole/Resource"
+   }
+  },
+  "AEModelingAEModelingSageMakerDomainDF6CB0EC": {
+   "Type": "AWS::SageMaker::Domain",
+   "Properties": {
+    "AuthMode": "IAM",
+    "DefaultUserSettings": {
+     "ExecutionRole": {
+      "Fn::GetAtt": [
+       "AEModelingAEModelingServiceRoleB9E24156",
+       "Arn"
+      ]
+     }
+    },
+    "DomainName": "AEModeling-domain",
+    "SubnetIds": [
+     {
+      "Ref": "AEModelingMyVPCPrivateSubnet1Subnet0237F56B"
+     },
+     {
+      "Ref": "AEModelingMyVPCPrivateSubnet2Subnet677D7DF8"
+     }
+    ],
+    "VpcId": {
+     "Ref": "AEModelingMyVPCB6D3E1F0"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/AEModeling-SageMakerDomain"
+   }
+  },
+  "AEModelingAEModelingUserProfileA3BCF131": {
+   "Type": "AWS::SageMaker::UserProfile",
+   "Properties": {
+    "DomainId": {
+     "Fn::GetAtt": [
+      "AEModelingAEModelingSageMakerDomainDF6CB0EC",
+      "DomainId"
+     ]
+    },
+    "UserProfileName": "adverse-event-user",
+    "UserSettings": {
+     "ExecutionRole": {
+      "Fn::GetAtt": [
+       "AEModelingAEModelingServiceRoleB9E24156",
+       "Arn"
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/AEModeling-UserProfile"
+   }
+  },
+  "AEModelingAEModelingLifeCycleConfig9C22A3C3": {
+   "Type": "AWS::SageMaker::NotebookInstanceLifecycleConfig",
+   "Properties": {
+    "NotebookInstanceLifecycleConfigName": "ae-config",
+    "OnCreate": [
+     {
+      "Content": {
+       "Fn::Base64": {
+        "Fn::Join": [
+         "",
+         [
+          "\n                    #!/bin/bash\n                    set -ex\n\n                    BUCKET=\"",
+          {
+           "Fn::ImportValue": "ae-modeling-bucket:ExportsOutputRefAEModelingBucketFA1C16C5F6E9B7D2"
+          },
+          "\"\n                    PREFIX=\"sagemaker\"\n                    DIRECTORY=\"ae_detection\"\n\n                    cd /home/ec2-user/SageMaker && mkdir -p $DIRECTORY\n                    aws s3 cp s3://$BUCKET/$PREFIX /home/ec2-user/SageMaker/$DIRECTORY --recursive\n                    sudo chown \"ec2-user\":\"ec2-user\" /home/ec2-user/SageMaker/$DIRECTORY --recursive\n                "
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/AEModeling/AEModeling-LifeCycleConfig"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ],
+    "Policies": [
+     {
+      "PolicyName": "Inline",
+      "PolicyDocument": {
+       "Version": "2012-10-17",
+       "Statement": [
+        {
+         "Effect": "Allow",
+         "Action": [
+          "ec2:AuthorizeSecurityGroupIngress",
+          "ec2:AuthorizeSecurityGroupEgress",
+          "ec2:RevokeSecurityGroupIngress",
+          "ec2:RevokeSecurityGroupEgress"
+         ],
+         "Resource": [
+          {
+           "Fn::Join": [
+            "",
+            [
+             "arn:aws:ec2:us-east-1:",
+             {
+              "Ref": "AWS::AccountId"
+             },
+             ":security-group/",
+             {
+              "Fn::GetAtt": [
+               "AEModelingMyVPCB6D3E1F0",
+               "DefaultSecurityGroup"
+              ]
+             }
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+     },
+     "S3Key": "7fa1e366ee8a9ded01fc355f704cff92bfd179574e6f9cfee800a3541df1b200.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "__entrypoint__.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Description": "Lambda function for removing all inbound/outbound rules from the VPC default security group"
+   },
+   "DependsOn": [
+    "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.7fa1e366ee8a9ded01fc355f704cff92bfd179574e6f9cfee800a3541df1b200",
+    "aws:asset:property": "Code"
+   }
+  },
+  "TweetsWrittenByLambdaTweetsA346C16F": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "id",
+      "AttributeType": "N"
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+     }
+    ],
+    "ProvisionedThroughput": {
+     "ReadCapacityUnits": 5,
+     "WriteCapacityUnits": 5
+    },
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TableName": "ae_tweets_ddb"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/TweetsWrittenByLambda/Tweets/Resource"
+   }
+  },
+  "TweetsWrittenByLambdaLambdaServiceRole5CC28C95": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonS3FullAccess"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonDynamoDBFullAccess"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonSageMakerFullAccess"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/ComprehendMedicalFullAccess"
+       ]
+      ]
+     }
+    ],
+    "RoleName": "LambdaServiceRoleForDDB"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/TweetsWrittenByLambda/LambdaServiceRole/Resource"
+   }
+  },
+  "TweetsWrittenByLambdaLambdaServiceRoleDefaultPolicyA1230E0C": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:ListStreams",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "dynamodb:DescribeStream",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "TweetsWrittenByLambdaTweetsA346C16F",
+         "StreamArn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "TweetsWrittenByLambdaTweetsA346C16F",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      },
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::ImportValue": "ae-modeling-bucket:ExportsOutputFnGetAttAEModelingBucketFA1C16C5ArnE0F4D119"
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "ae-modeling-bucket:ExportsOutputFnGetAttAEModelingBucketFA1C16C5ArnE0F4D119"
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "TweetsWrittenByLambdaLambdaServiceRoleDefaultPolicyA1230E0C",
+    "Roles": [
+     {
+      "Ref": "TweetsWrittenByLambdaLambdaServiceRole5CC28C95"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/TweetsWrittenByLambda/LambdaServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "TweetsWrittenByLambdaInferenceHandler2B94B46D": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+     },
+     "S3Key": "9f8b557b9a7698ae0d395eb4fffc299c52b51289fb7072c7242a116388f04d4e.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "PROJECT_BUCKET_NAME": {
+       "Fn::ImportValue": "ae-modeling-bucket:ExportsOutputRefAEModelingBucketFA1C16C5F6E9B7D2"
+      },
+      "AE_THRESHOLD": "0.6",
+      "ENDPOINT_NAME": "HF-BERT-AE-model"
+     }
+    },
+    "Handler": "inference.lambda_handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "TweetsWrittenByLambdaLambdaServiceRole5CC28C95",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.9"
+   },
+   "DependsOn": [
+    "TweetsWrittenByLambdaLambdaServiceRoleDefaultPolicyA1230E0C",
+    "TweetsWrittenByLambdaLambdaServiceRole5CC28C95"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/TweetsWrittenByLambda/InferenceHandler/Resource",
+    "aws:asset:path": "asset.9f8b557b9a7698ae0d395eb4fffc299c52b51289fb7072c7242a116388f04d4e",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "TweetsWrittenByLambdaInferenceHandlerDynamoDBEventSourceaestackTweetsWrittenByLambdaTweets46FB035EDAA98E02": {
+   "Type": "AWS::Lambda::EventSourceMapping",
+   "Properties": {
+    "BatchSize": 10,
+    "EventSourceArn": {
+     "Fn::GetAtt": [
+      "TweetsWrittenByLambdaTweetsA346C16F",
+      "StreamArn"
+     ]
+    },
+    "FunctionName": {
+     "Ref": "TweetsWrittenByLambdaInferenceHandler2B94B46D"
+    },
+    "MaximumRetryAttempts": 10000,
+    "StartingPosition": "LATEST"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/TweetsWrittenByLambda/InferenceHandler/DynamoDBEventSource:aestackTweetsWrittenByLambdaTweets46FB035E/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/81XXU/bMBT9LeRxCpkK0jTxFkpB0aBEbQfSEKpu7NvWa2JHtlMoVf/7rp2k4UPjATapT7HvvbaPfY6P26Oo970X9Q7gwRwyvjzMRRZtxhbYMqTQdIPsKNrclOxuExTwGD+Z4CT4Emzvw/5M3qT9MK2yXLBxlUm0VAMrEDlkIhd2/UtJ9NVhsCpZwps2E1yf5ootm34BZT1JUl7LS6gkWwQnVlcYBqJcfeu/KgdjxFwmlIk512jMtexrBCuUrKGFe4LCA+F8CPYCLD7AOji5o8z93gDcDxR/PSYvsVpYrjVSlcUJZDl28S4WG6OY8BPvil1jkKTu080eplqsqPnPFTuD3OwBF5+DsT9I9gRGrcJEWtQkl1ZDtfc1vdiSWy4KlHYbCiiizUjl6IRlTFUgPyVBb4JSC8lECXnMmKqk7RBQjRsQs27Z5kpcgYQ58lTRjtytcA78LBLrpvz+Q/UfRhcGmiJDKLDj6n+D/f/1E5W2h9CNabKe4ETmQuIut3Pyd5Pvz/vR7H1tceSEdditt4MyUS7zBuHbMOf0zFt0wjUvlv1k2KOrgW1DQ0dewBJ1tKHomSpAeIP+aVCnWs1EbedDZTFTaplIY0EyvBQzZGuWY1/JmZhvQ76WUChOv0283ROdJWgrnCp/oNewbAUZBnZduubQaxWB96EERjbSpDUWatUdacDRWK3WlKEvQuGGDm6n8fBsen15Nk2u4ovBmLIPWlh8NZd1aLq74PfuEW7DHIqMQ7Q5Jx9yOAkzypXQSrrTarF4Umo3U7xtLkDyHHVbQzdSvLxtg+cTefqf0fqRpAfeIg0HK0qPVaUZXkFZCjkn8Bb0HFvc2FW0V4n8F60WzNScNbEMLFuMxVO7tUwYZPbURa/lQGvV7pKIJ0LlPFVGNGZzGU8G44lnrFS6HpSQ2M7pZajIr3e2/+hTNPhWSK4euvgImdI8nuOOequdYWNR2nY4CQnyHHPx5J3/HJjdgXJdv1ZLd1XQ+/JqHZSO8PZRIknTY2Fe9AaS6XXZWag/7beHTNfleEqmi9ZEsftQPzqt2BJp7wbviMMRGj+iZc6zF/YrY1XxPFdbRBN4lad7txIctZsz9OvQHZ779dO1XSj59Tjq0X+C3sFvI8RhI79oVH//AO78BgExDAAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-stack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

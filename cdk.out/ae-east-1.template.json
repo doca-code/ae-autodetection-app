@@ -1,0 +1,371 @@
+{
+ "Resources": {
+  "AEModelingeast1AEModelingeast1ServiceRoleeast15E08909E": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": [
+         "lambda.amazonaws.com",
+         "s3.amazonaws.com",
+         "sagemaker.amazonaws.com"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AWSCodeCommitPowerUser"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonSageMakerFullAccess"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonS3FullAccess"
+       ]
+      ]
+     }
+    ],
+    "RoleName": "AEModeling-east-1-ServiceRole-east-1"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ae-east-1/AEModeling-east-1/AEModeling-east-1-ServiceRole-east-1/Resource"
+   }
+  },
+  "AEModelingeast1AEModelingeast1LifeCycleConfigeast1FB89A49C": {
+   "Type": "AWS::SageMaker::NotebookInstanceLifecycleConfig",
+   "Properties": {
+    "NotebookInstanceLifecycleConfigName": "ae-config",
+    "OnCreate": [
+     {
+      "Content": {
+       "Fn::Base64": {
+        "Fn::Join": [
+         "",
+         [
+          "\n                    #!/bin/bash\n                    set -ex\n\n                    BUCKET=\"",
+          {
+           "Fn::ImportValue": "ae-bucket-east-1:ExportsOutputRefAEModelingBucketeast10CE9D2254C2AE1FE"
+          },
+          "\"\n                    PREFIX=\"sagemaker\"\n                    DIRECTORY=\"ae_detection\"\n\n                    cd home/ec2-user/SageMaker && mkdir -p $DIRECTORY\n                    aws s3 cp s3://$BUCKET/$PREFIX /home/ec2-user/SageMaker/$DIRECTORY --recursive\n                    sudo chown \"ec2-user\":\"ec2-user\" /home/ec2-user/SageMaker/$DIRECTORY --recursive\n                "
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ae-east-1/AEModeling-east-1/AEModeling-east-1-LifeCycleConfig-east-1"
+   }
+  },
+  "AEModelingeast1AEModelingeast1notebook2B789C16": {
+   "Type": "AWS::SageMaker::NotebookInstance",
+   "Properties": {
+    "InstanceType": "ml.t2.medium",
+    "LifecycleConfigName": "ae-config",
+    "NotebookInstanceName": "AdverseEventDetectionModeling",
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "AEModelingeast1AEModelingeast1ServiceRoleeast15E08909E",
+      "Arn"
+     ]
+    },
+    "RootAccess": "Enabled"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ae-east-1/AEModeling-east-1/AEModeling-east-1-notebook"
+   }
+  },
+  "TweetsWrittenByLambdaeast1TweetsC5447490": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "id",
+      "AttributeType": "N"
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+     }
+    ],
+    "ProvisionedThroughput": {
+     "ReadCapacityUnits": 5,
+     "WriteCapacityUnits": 5
+    },
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TableName": "ae_tweets_ddb"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ae-east-1/TweetsWrittenByLambda-east-1/Tweets/Resource"
+   }
+  },
+  "TweetsWrittenByLambdaeast1LambdaServiceRoleeast1F9202E56": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": [
+         "comprehendmedical.amazonaws.com",
+         "lambda.amazonaws.com",
+         "sagemaker.amazonaws.com"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "RoleName": "LambdaServiceRoleForDDB"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-east-1/TweetsWrittenByLambda-east-1/LambdaServiceRole-east-1/Resource"
+   }
+  },
+  "TweetsWrittenByLambdaeast1LambdaServiceRoleeast1DefaultPolicy4FB89222": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:ListStreams",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "dynamodb:DescribeStream",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "TweetsWrittenByLambdaeast1TweetsC5447490",
+         "StreamArn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "TweetsWrittenByLambdaeast1TweetsC5447490",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      },
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::ImportValue": "ae-bucket-east-1:ExportsOutputFnGetAttAEModelingBucketeast10CE9D225ArnBD2EA550"
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "ae-bucket-east-1:ExportsOutputFnGetAttAEModelingBucketeast10CE9D225ArnBD2EA550"
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "TweetsWrittenByLambdaeast1LambdaServiceRoleeast1DefaultPolicy4FB89222",
+    "Roles": [
+     {
+      "Ref": "TweetsWrittenByLambdaeast1LambdaServiceRoleeast1F9202E56"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-east-1/TweetsWrittenByLambda-east-1/LambdaServiceRole-east-1/DefaultPolicy/Resource"
+   }
+  },
+  "TweetsWrittenByLambdaeast1InferenceHandlerFBBC147F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+     },
+     "S3Key": "9f8b557b9a7698ae0d395eb4fffc299c52b51289fb7072c7242a116388f04d4e.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "PROJECT_BUCKET_NAME": {
+       "Fn::ImportValue": "ae-bucket-east-1:ExportsOutputRefAEModelingBucketeast10CE9D2254C2AE1FE"
+      },
+      "AE_THRESHOLD": "0.6",
+      "ENDPOINT_NAME": "HF-BERT-AE-model"
+     }
+    },
+    "Handler": "inference.lambda_handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "TweetsWrittenByLambdaeast1LambdaServiceRoleeast1F9202E56",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.9"
+   },
+   "DependsOn": [
+    "TweetsWrittenByLambdaeast1LambdaServiceRoleeast1DefaultPolicy4FB89222",
+    "TweetsWrittenByLambdaeast1LambdaServiceRoleeast1F9202E56"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ae-east-1/TweetsWrittenByLambda-east-1/InferenceHandler/Resource",
+    "aws:asset:path": "asset.9f8b557b9a7698ae0d395eb4fffc299c52b51289fb7072c7242a116388f04d4e",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "TweetsWrittenByLambdaeast1InferenceHandlerDynamoDBEventSourceaeeast1TweetsWrittenByLambdaeast1Tweets915BA7410A8D9571": {
+   "Type": "AWS::Lambda::EventSourceMapping",
+   "Properties": {
+    "BatchSize": 10,
+    "EventSourceArn": {
+     "Fn::GetAtt": [
+      "TweetsWrittenByLambdaeast1TweetsC5447490",
+      "StreamArn"
+     ]
+    },
+    "FunctionName": {
+     "Ref": "TweetsWrittenByLambdaeast1InferenceHandlerFBBC147F"
+    },
+    "MaximumRetryAttempts": 10000,
+    "StartingPosition": "LATEST"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-east-1/TweetsWrittenByLambda-east-1/InferenceHandler/DynamoDBEventSource:aeeast1TweetsWrittenByLambdaeast1Tweets915BA741/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/71V3U/bMBD/W8gjMpk6XibeAoSpGpSqrcQDQtXFvrZeHTuyHViI+r/v4sb9gGma2LQn+75/599d8jkdfBmkgxN4cWdcrM+ULNJ26oGvGanmrYQybSdG4WObgHN1ieKySS7apLJSc1mByjg3tfbJRXKasN6nC8i4l0YH9YYlljQjKLGXKZkQd6BhiWJslOSUkyqUh5rM9tFP/8W/qlQzwdI8g9pFJAKdt6ZJti7/uP+ZGccke4w9Gk8UrIZaSY17NKfJHxh/n/ej1id2tdBdW2yr7urtoMxMZ3mH8L1aCBotjyVq747K/qU6oNsC2zBHFJewRpu2pB0Zj4Ux66F2HjTHW7lA3nCFV0Yv5JL9wmXDRKOhNIJWYQZFmP0KrJcdod8w0K8jlyzxTdVdR4FmBHEFFXDpm95sj2dqN1IsoROh7ELzh3k2up7f317Ph3fZ13xK1hcrPb7J5Ts0+zEKbQeEG6agLASk7U2tw+ARZtTP0hrdPVTEEvgIV25EvK5AC4U2+tAwy+NBzQ8TBeYPGP2IMQCPSFn+TOapqS3HO1pDqZcE3oNdYsSNe4+4tSwp0VvJ3ZbHXleA56upfI2tFdIh95ed9l7n1prYJTFNhOrl2DjZ7+ltNsuns8BYZew2aEhzdgNS1RZdLAs/gomCH6QW5mWvnyA3VmRL3FHvbZN5ylH5GE6DBEqhkq/Q1b0B7negOjHUinTXZaHe1kHdES56aSGVR+uOpFxz21T7r0947fePTJtyPqfvFXqXZt1BcnpZ8zVS7w4ficMJuhARmQvsseBMO7gMScaNXxn96Twd0H9kcPLdSXnWz1A62Z4/AXThXe9lBgAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ae-east-1/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
