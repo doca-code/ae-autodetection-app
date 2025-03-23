@@ -1,4 +1,4 @@
-# Welcome to the Cloud9 Twitter listener
+# Welcome to the Twitter listener
 
 1. Create and activate virtual env
 
