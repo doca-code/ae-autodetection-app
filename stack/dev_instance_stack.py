@@ -30,21 +30,17 @@ class DevInstanceStack(Stack):
             machine_image=ec2.MachineImage.latest_amazon_linux(),
             vpc=new_vpc,
             role=role,
-            removal_policy=RemovalPolicy.DESTROY
         )
 
         # User Data to set up the instance
         instance.user_data.add_commands(
             "yum update -y",
             "yum install -y unzip git python3-pip",  # Install dependencies (git, unzip, pip)
-            "cd /home/ec2-user",
+            "cd /home/cloudshell-user",
             "git clone https://github.com/doca-code/ae-autodetection-app.git",  # Clone the full repo
             "cd ae-autodetection-app/data_ingestion",
             "unzip data_ingestion.zip -d ../twitter-scripts",  # Extract ZIP into twitter-scripts folder
             "rm data_ingestion.zip",  # Clean up ZIP file
-            "pip3 install -r requirements.txt",  # Install Python dependencies
-            "python3 -m spacy download en_core_web_sm",  # Download spaCy model
-            "python3 stream.py"  # Start the Twitter API stream listener
         )
         # Make sure VPC is deleted when the stack is destroyed
         new_vpc.apply_removal_policy(RemovalPolicy.DESTROY)

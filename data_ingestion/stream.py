@@ -79,7 +79,7 @@ def locate(u_id):
     # Loop through and identify entities recognized and extracted from raw location info
     for ent in doc.ents:
       # print(ent.text, ent.start_char, ent.end_char, ent.label_)
-      if ent.label_ is 'GPE':
+      if ent.label_ == 'GPE':
             if ent.text in us_cities_names:
                 return ['city', ent.text]
             elif ent.text in states_names:
@@ -116,7 +116,7 @@ class BearerTokenAuth(AuthBase):
         auth=(self.consumer_key, self.consumer_secret),
         data={'grant_type': 'client_credentials'},
         headers={'User-Agent': 'TwitterDevFilteredStreamQuickStartPython'})
-        if response.status_code is not 200:
+        if response.status_code != 200:
             raise Exception(f"Cannot get a Bearer token (HTTP %d): %s" % (response.status_code, response.text))
         body = response.json()
         return body['access_token']
